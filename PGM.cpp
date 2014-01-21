@@ -74,17 +74,9 @@ void output_file(char** argv,int cols, int rows, gray maxval){	// rows und cols 
 	pm_close(output);	
 }
 
-double calculate_length(int xin, int xout, int yin, int yout){
-	int koordX, koordY;
-	double l;
-	koordX = xin-xout;
-	koordY = yin-yout;
-	l= sqrt(koordX*koordX + koordY*koordY);
-	return l;
-}
 
 double update_power(int power_in, double zelle,int xin, int xout, int yin, int yout){		// zelle = mygrid.ABS_COEF[i]
-	double l = calculate_length(xin,xout,yin,yout);
+	double l = sqrt((xin-xout)*(xin-xout)+ (yin-yout)*(yin-yout));
 	return  power_in * exp(-zelle * l);// power_out =
 }
 
