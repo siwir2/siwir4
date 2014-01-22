@@ -49,7 +49,6 @@ void input_files(char* argv[]){
 		}
 	}
 	
-	Grid grid;
 	grid.REFR_INDX= refr_indx;			// dem struct zuweisen
 	grid.ABS_COEF = abs_coef;
 	
@@ -59,33 +58,60 @@ void input_files(char* argv[]){
 	pm_close(abso);
 }
 
-// 		pgm_writepgmrow(output,grayrow1,colsRefr1,maxval1,0);	// output
-void output_file(char** argv,int cols, int rows, gray maxval){	// rows und cols mit uebergeben
+
+void output_file(int cols, int rows){	// rows und cols mit uebergeben
 	FILE *output;
 	gray *outgrayrow;			// alloc row returns type gray
-	int argc = sizeof(argv);
-	pgm_init(&argc,argv);
+	gray maxval;
+// 	int argc = sizeof(argv);
+// 	pgm_init(&argc,argv);
 	
 	output = pm_openw("output.pgm");		// write
 	pgm_writepgminit(output,cols,rows,maxval,0);
 	outgrayrow = pgm_allocrow(cols);
-
+	
+	for(int y = 0; y< rows; ++y){
+		pgm_writepgmrow(output,outgrayrow,cols,maxval,0);
+		for(int x = 0; x< cols; ++x){
+			outgrayrow[x]= grid.ABSO_POWER[y*cols+x];		// das ergebnis in die output hinzufuegen
+		}
+	}
+	
 	pgm_freerow(outgrayrow);	//output
 	pm_close(output);	
 }
 
 
-double update_power(int power_in, double zelle,int xin, int xout, int yin, int yout){		// zelle = mygrid.ABS_COEF[i]
-	double l = sqrt((xin-xout)*(xin-xout)+ (yin-yout)*(yin-yout));
-	return  power_in * exp(-zelle * l);// power_out =
+
+//MAIN:
+void output_nomieren(){
+	double maximum = grid.ABSO_POWER[0];
+	for(int y = 0; y<grid.NY; ++y){
+		for(int x = 0;x<grid.NX; ++x){
+			if (grid.ABSO_POWER[y*grid.NX+x] > maximum){
+				maximum = grid.ABSO_POWER[y*grid.NX+x];
+			}
+		}
+	}
+	for(int y = 0; y<grid.NY; ++y){
+		for(int x = 0;x<grid.NX; ++x){
+			grid.ABSO_POWER[y*grid.NX+x] = round((((double)grid.ABSO_POWER[y*grid.NX+x]/(double)maximum))*255);
+		}
+	}
 }
-
-
-
-int main (int argc, char * argv[]){
-
-// 	input_files(argv);
-	
-	return 0;
+//MAIN:
+void update_power_ray_and_cell(int power_in, double l,int cell_idx){
+	double power_out = power_in * exp(-grid.ABS_COEF[cell_idx] * l);		// zelle = grid.ABS_COEF[cell_idx]
+	delta_power = power_in-power_out;
+	grid.ABSO_POWER[cell_idx] += delta_power;
 }
-
+//MAIN:
+int update_position(int cell_idx_old, int CASE){
+	if (CASE == TOP){
+		return cell_idx_new =  cell_idx_old - grid.NX;
+	} if (CASE == BOTTOM){
+		return cell_idx_new = cell_idx_old + grid.NX;
+	} if (CASE == RIGHT){
+		return cell_idx_new = cell_idx_old + 1;
+	}
+}
