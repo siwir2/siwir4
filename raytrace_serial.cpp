@@ -10,25 +10,21 @@
 #include <math.h>
 #include <header.h>
 
-int update_position(cell_idx_old, CASE){
-	grid.NX
-	grid.NY
-	
-}
-
-
 void initialize_lamp(const int nRays){
+
 	srand48 (157);
 	int n_r = 1;
 	int NA = 0.5;       //numerische apertur
 	double alpha = M.PI/6;
-	for(int i = 0; i< 2*nRays; ++i){
-		rays.angles[i] = -alpha+2*alpha*drand48();         //in [-pi/6 , pi/6] oder [-30,30]
-		rays.pos_y[i] = -0.1+0.2*drand48();    // innerhalb [-0.1,0.1]
+	for(int i = 0; i< nRays; ++i){
+		rays.angles[i] = -alpha+2*alpha*drand48();		//in [-pi/6 , pi/6] oder [-30,30]
+		rays.global_y[i] = -0.1+0.2*drand48();		// innerhalb [-0.1,0.1]
 	}
 }
 
-bool check_for_position(const int idx){
+
+bool check_if_in_grid(const int idx){
+	
 	if(rays.global_x[idx] > 0 && rays.global_x[idx] < grid.NX){
 		if(rays.global_y[idx] > 0 && rays.global_y[idx] < grid.NY){
 			return true;
@@ -39,15 +35,35 @@ bool check_for_position(const int idx){
 	}
 }
 
-bool check_for_refraction(const int idx, const int CASE){
 
-	if(grid.REFR_INDX[cell_idx_old] != grid.REFR_INDX[cell_idx_new]){
+bool check_ray_for_power(const int idx){
+
+	if(rays.power[idx] < (P/nRays - rays.power[idx]*0.999){
 		return false;
 	}
 	else{
 		return true;
 	}
 }
+
+
+bool check_for_refraction(const int idx, const int CASE){
+
+	if(grid.REFR_INDX[cell_idx_old] != grid.REFR_INDX[cell_idx_new]){
+		return true;
+	}
+	else{
+		return false;
+}
+
+
+void refraction_change_alpha(const int idx, const int cell_idx_old, const int cell_idx_new){
+
+	rays.angle[idx] = asin(sin(rays.angle[ray_idx]) * 
+										(grid.REFR_INDX[cell_idx_old] 
+										/ grid.REFR_INDX[cell_idx_new]));
+}
+
 
 int update_cell(const int idx, const int CASE){
 

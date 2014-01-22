@@ -23,6 +23,7 @@ struct GRID{
 };
 
 struct RAYS{
+	double *power;
 	double *local_x;
 	double *local_y;
 	double *angle;
