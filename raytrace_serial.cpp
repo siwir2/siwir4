@@ -16,9 +16,21 @@ void initialize_lamp(const int nRays){
 	int n_r = 1;
 	int NA = 0.5;       //numerische apertur
 	double alpha = M.PI/6;
+	int intervall = 0.1 * grid.NY;
+	int start_idx = grid.NY/2 - intervall/2;
+//	int end_idx = grid.NY/2 + intervall -intervall/2
+//	if(end_idx - start_idx != intervall){
+//		cout<<"error: mapping auf lokale koordinaten"<<endl;
+//		exit(1);
+//	}
 	for(int i = 0; i< nRays; ++i){
 		rays.angles[i] = -alpha+2*alpha*drand48();		//in [-pi/6 , pi/6] oder [-30,30]
-		rays.global_y[i] = -0.1+0.2*drand48();		// innerhalb [-0.1,0.1]
+		//rays.global_y[i] = -0.1+0.2*drand48();		// innerhalb [-0.1,0.1]
+//brauche globale koodinaten noch?  - nur ein aufruf von drand()!!!!
+
+		/*umrechnen auf lokale koordinaten*/
+		//rays.idx_y[i] = grid.NY/2 * rays.global_y[i] + grid.NY/2;
+		rays.idx_y[i] = start_idx + intervall * drand48();
 	}
 }
 
