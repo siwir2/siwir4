@@ -29,6 +29,9 @@ struct RAYS{
 	double *angle;
 	int *global_x;
 	int *global_y;
+	int *idx_x;
+	int *idx_y;
+/*globale position auf die indizes im grid mappen?*/
 };
 
 //
