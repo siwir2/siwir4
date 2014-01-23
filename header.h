@@ -34,6 +34,16 @@ struct RAYS{
 /*globale position auf die indizes im grid mappen?*/
 };
 
-//
-extern void initialize_lamp(const int);
-extern int update_cell(const int);
+void initialize_lamp(const int nRays, const double P);
+bool check_if_in_grid(const int idx);
+bool check_ray_for_power(const int idx);
+bool check_for_refraction(const int idx, const int CASE);
+void refraction_change_alpha(const int idx, const int cell_idx_old, const int cell_idx_new);
+void update_power_ray_and_cell(const double laenge, const int cell_idx, const int ray_idx);
+int update_position(int cell_idx_old, int CASE);
+int update_cell(const int idx, const int CASE);
+
+void input_files(char* argv[]);
+void output_file(int cols, int rows);
+void output_nomieren();
+

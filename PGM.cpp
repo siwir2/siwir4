@@ -99,19 +99,3 @@ void output_nomieren(){
 		}
 	}
 }
-//MAIN:
-void update_power_ray_and_cell(int power_in, double l,int cell_idx){
-	double power_out = power_in * exp(-grid.ABS_COEF[cell_idx] * l);		// zelle = grid.ABS_COEF[cell_idx]
-	delta_power = power_in-power_out;
-	grid.ABSO_POWER[cell_idx] += delta_power;
-}
-//MAIN:
-int update_position(int cell_idx_old, int CASE){
-	if (CASE == TOP){
-		return cell_idx_new =  cell_idx_old - grid.NX;
-	} if (CASE == BOTTOM){
-		return cell_idx_new = cell_idx_old + grid.NX;
-	} if (CASE == RIGHT){
-		return cell_idx_new = cell_idx_old + 1;
-	}
-}

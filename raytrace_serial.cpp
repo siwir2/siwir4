@@ -10,7 +10,9 @@
 #include <math.h>
 #include <header.h>
 
-void initialize_lamp(const int nRays){
+
+//TODO: Leistung auf strahlen aufteilen
+void initialize_lamp(const int nRays, const double P){
 
 	srand48 (157);
 	int n_r = 1;
@@ -50,7 +52,7 @@ bool check_if_in_grid(const int idx){
 
 bool check_ray_for_power(const int idx){
 
-	if(rays.power[idx] < (P/nRays - rays.power[idx]*0.999){
+	if(rays.power[idx] < (P/nRays - rays.power[idx]*0.999)){
 		return false;
 	}
 	else{
@@ -74,6 +76,41 @@ void refraction_change_alpha(const int idx, const int cell_idx_old, const int ce
 	rays.angle[idx] = asin(sin(rays.angle[ray_idx]) * 
 										(grid.REFR_INDX[cell_idx_old] 
 										/ grid.REFR_INDX[cell_idx_new]));
+}
+
+
+/*berechnet den Leistungsverlust des Strahls bzw. den Leistungszuwachs der Zelle*/
+void update_power_ray_and_cell(const double laenge, const int cell_idx, const int ray_idx){
+	double tmp = rays.power[ray_idx];
+	rays.power[ray_idx] = rays.power[ray_idx] * exp(-grid.ABS_COEF[cell_idx] * l);	//zelle = grid.ABS_COEF[cell_idx]
+	double delta_power = rays.power[ray_idx] - tmp;
+	grid.ABSO_POWER[cell_idx] += delta_power;
+}
+
+
+/*gibt den nächsten index aus*/
+int update_position(int cell_idx_old, int CASE){
+	if(CASE == LEFT){
+		//eins nach rechts
+		return cell_idx_new = cell_idx_old + 1;
+	}
+	else if(CASE == TOP){
+		//eins nach unten
+		return cell_idx_new =  cell_idx_old + grid.NX;
+	}
+	else if (CASE == BOTTOM){
+		//eins nach oben
+		return cell_idx_new = cell_idx_old - grid.NX;
+	}
+	
+	else if(CASE == CORNER_LEFT_BOTTOM){
+		//eins nach oben eins nach rechts
+		return cell_idx_new = cell_idx_old - grid.NX + 1;
+	}
+	else if(VASE == CORNER_LEFT_TOP){
+		//eins nach unten eins nach rechts
+		return cell_idx_new = cell_idx_old + grid.NX + 1;
+	}
 }
 
 
