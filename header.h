@@ -47,3 +47,5 @@ void input_files(char* argv[]);
 void output_file(int cols, int rows);
 void output_nomieren();
 
+
+//kommentar
