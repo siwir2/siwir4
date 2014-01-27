@@ -27,25 +27,22 @@ struct RAYS{
 	double *local_x;
 	double *local_y;
 	double *angle;
-	int *global_x;
-	int *global_y;
+	double *global_x;
+	double *global_y;
 	int *idx_x;
 	int *idx_y;
+	int *CASE;
 /*globale position auf die indizes im grid mappen?*/
 };
 
 void initialize_lamp(const int nRays, const double P);
 bool check_if_in_grid(const int idx);
-bool check_ray_for_power(const int idx);
-bool check_for_refraction(const int idx, const int CASE);
-void refraction_change_alpha(const int idx, const int cell_idx_old, const int cell_idx_new);
+bool check_ray_for_power(const double pw_div_nRys, const int idx);
+bool check_for_refraction(const int idx, const int cell_idx_old, const int cell_idx_new, const int CASE);
+void refraction_change_alpha(const int ray_idx, const int cell_idx_old, const int cell_idx_new);
 void update_power_ray_and_cell(const double laenge, const int cell_idx, const int ray_idx);
-int update_position(int cell_idx_old, int CASE);
-int update_cell(const int idx, const int CASE);
-
+void update_position(const int idx, RAYS *rays);
+void update_cell(const int idx, GRID *grid, RAYS *rays);
 void input_files(char* argv[]);
 void output_file(int cols, int rows);
 void output_nomieren();
-
-
-//kommentar
